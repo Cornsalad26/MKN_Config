@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistem Penjana Surat Rasmi MKN / NACSA (GitHub Pages)</title>
+    <title>Sistem Penjana Surat Rasmi MKN / NACSA</title>
     <style>
         :root {
             --primary: #111c44;
@@ -127,23 +127,59 @@
         }
         
         /* Pratonton Cetak A4 Rasmi MKN */
+        @page { size: A4; margin: 14mm 18mm 18mm 20mm; }
         #cetak-preview {
             display: none;
             background: #4a5568;
             padding: 20px 0;
             min-height: 100vh;
         }
-        .action-bar { max-width: 210mm; margin: 0 auto 15px auto; display: flex; justify-content: space-between; align-items: center; background: #111c44; padding: 12px 20px; border-radius: 8px; color: #fff; box-sizing: border-box; }
-        .btn-action { background: #ecc94b; color: #1a202c; border: none; padding: 8px 15px; border-radius: 5px; font-weight: bold; cursor: pointer; text-decoration: none; font-size: 13px; margin-left: 6px; }
-        .btn-action.secondary { background: #edf2f7; color: #2d3748; }
-        .kertas-a4 { background: #fff; width: 210mm; min-height: 297mm; margin: 0 auto; padding: 14mm 18mm 18mm 20mm; box-sizing: border-box; box-shadow: 0 4px 15px rgba(0,0,0,0.35); font-family: Arial, sans-serif; font-size: 11pt; line-height: 1.35; color: #000; outline: 2px dashed #cbd5e0; }
+        .action-bar {
+            max-width: 210mm;
+            margin: 0 auto 15px auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #111c44;
+            padding: 12px 20px;
+            border-radius: 8px;
+            color: #fff;
+            box-sizing: border-box;
+        }
+        .btn-action {
+            background: #ecc94b;
+            color: #1a202c;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            font-weight: bold;
+            cursor: pointer;
+            text-decoration: none;
+            font-size: 13px;
+            margin-left: 6px;
+        }
+        .btn-action.secondary { background: #edf2f7; color: #1a202c; }
+        .kertas-a4 {
+            background: #fff;
+            width: 210mm;
+            min-height: 297mm;
+            margin: 0 auto;
+            padding: 14mm 18mm 18mm 20mm;
+            box-sizing: border-box;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.35);
+            font-family: Arial, sans-serif;
+            font-size: 11pt;
+            line-height: 1.35;
+            color: #000;
+            outline: none;
+        }
         
         @media print {
             body { background: #fff; padding: 0; }
             .no-print { display: none !important; }
             #cetak-preview { background: #fff; padding: 0; }
             .action-bar { display: none !important; }
-            .kertas-a4 { box-shadow: none; width: 100%; min-height: auto; padding: 0; margin: 0; outline: none; }
+            .kertas-a4 { box-shadow: none; width: 100%; min-height: auto; padding: 0; margin: 0; }
         }
     </style>
 </head>
@@ -153,7 +189,7 @@
     <div class="header-banner">
         <div>
             <h1>Sistem Borang Surat Rasmi (MKN / NACSA)</h1>
-            <p>Versi GitHub Pages (Logo DKN Dibesarkan & Selari Telefon)</p>
+            <p>Isi butiran di bawah — Sistem akan jana surat mengikut format rasmi MKN & DKN 2026-2030.</p>
         </div>
     </div>
 
@@ -164,7 +200,7 @@
             <div class="row-2">
                 <div class="form-group">
                     <label>Ruj. Kami (Biarkan kosong untuk isi manual)</label>
-                    <input type="text" id="no_rujukan_kami" placeholder="Contoh: MKN.500-8/9/1 (   )">
+                    <input type="text" id="no_rujukan_kami" placeholder="Contoh: MKN.500-8/9/1 (   ) atau biarkan kosong">
                 </div>
                 <div class="form-group">
                     <label>Tarikh Surat *</label>
@@ -288,7 +324,7 @@
         <div class="card">
             <h3>5. Ayat Penutup & Butiran Pegawai Penandatangan</h3>
             <div class="form-group">
-                <label>Ayat Penutup</label>
+                <label>Ayat Penutup (Sebelum "Sekian, terima kasih.")</label>
                 <textarea id="ayat_penutup" rows="2">Kerjasama dan perhatian Tuan/Puan mengenai perkara ini amatlah dihargai.</textarea>
             </div>
 
@@ -298,8 +334,8 @@
                     <input type="text" id="manual_nama_pegawai" placeholder="Contoh: MUHAMAD HAFIZ BIN AZMAN" required>
                 </div>
                 <div class="form-group">
-                    <label>Jawatan Pegawai</label>
-                    <input type="text" id="manual_jawatan_pegawai" placeholder="Contoh: Ketua Unit Audit">
+                    <label>Jawatan Pegawai (Jika ada)</label>
+                    <input type="text" id="manual_jawatan_pegawai" placeholder="Contoh: Ketua Unit Audit / Kosongkan jika tiada">
                 </div>
             </div>
 
@@ -337,27 +373,27 @@
 
             <div class="form-group">
                 <label>Salinan Kepada / s.k. (Jika ada)</label>
-                <textarea id="salinan_kepada" rows="2"></textarea>
+                <textarea id="salinan_kepada" rows="2" placeholder="Biarkan kosong jika tiada"></textarea>
             </div>
         </div>
 
-        <button type="submit" class="btn-submit">Jana & Cetak Surat Rasmi Sekarang ➔</button>
+        <button type="submit" class="btn-submit">Jana Surat Rasmi MKN / NACSA Sekarang ➔</button>
     </form>
 
     <!-- SEJARAH SURAT -->
     <div class="card" style="margin-top: 25px; border-left-color: #38a169;">
-        <h3>Rekod Surat Tersimpan (Dalam Pelayar)</h3>
+        <h3>Rekod Surat Yang Telah Dijana (Dalam Pelayar)</h3>
         <ul id="senarai-sejarah" style="padding-left: 20px; margin: 0;"></ul>
         <button type="button" onclick="padamSejarah()" style="margin-top: 15px; background: #fed7d7; color: #c53030; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 12px;">Padam Semua Rekod Tersimpan</button>
     </div>
 </div>
 
-<!-- PAPARAN CETAK SURAT (A4 Rasmi MKN) - contenteditable="true" -->
+<!-- PAPARAN CETAK SURAT (A4 Rasmi MKN) -->
 <div id="cetak-preview">
     <div class="action-bar no-print">
         <div>
             <strong>Pratonton Surat Rasmi MKN / NACSA</strong>
-            <span style="font-size:12px; opacity:0.85; display:block;">Klik terus pada teks kertas di bawah untuk edit sebelum cetak atau muat turun Word.</span>
+            <span style="font-size:12px; opacity:0.85; display:block;">Susunan Header telah diselaraskan mengikut format rasmi MKN. (Teks boleh di-edit terus)</span>
         </div>
         <div>
             <button onclick="tutupPreview()" class="btn-action secondary">← Borang Baru</button>
@@ -367,13 +403,16 @@
     </div>
 
     <div class="kertas-a4" id="kandungan-surat" contenteditable="true" spellcheck="false">
-        <!-- HEADER RASMI MKN -->
+        <!-- HEADER RASMI MKN: 100% Mengikut Nisbah & Alignment Surat Sebenar -->
         <table width="100%" cellpadding="0" cellspacing="0" style="border-bottom: 1.5px solid #000; margin-bottom: 6px; font-family: Arial, sans-serif;">
             <tr>
-                <td width="120" valign="top" align="left" style="padding-top: 1px; padding-bottom: 8px;">
-                    <img src="logo_mkn.png" width="115" height="95" style="width: 115px; height: 95px; display: block; margin: 0;" onerror="this.style.display='none';">
+                <!-- 1. KIRI: Logo Jata Negara (Saiz 115x95: Selari tepat dari baris 'MAJLIS' hingga 'MALAYSIA') -->
+                <td width="122" valign="top" align="left" style="padding-top: 1px; padding-bottom: 8px;">
+                    <img id="img-jata" src="logo_mkn.png" width="115" height="95" style="width: 115px; height: 95px; display: block; margin: 0;" onerror="this.style.display='none';">
                 </td>
-                <td valign="top" align="left" style="padding-left: 6px; padding-top: 0px; padding-bottom: 8px; font-size: 10pt; line-height: 1.22; color: #000;">
+                
+                <!-- 2. TENGAH: Alamat MKN (6 Baris Tetap, Sebaris dengan Puncak & Tapak Logo) -->
+                <td valign="top" align="left" style="padding-left: 8px; padding-top: 0px; padding-bottom: 8px; font-size: 10pt; line-height: 1.22; color: #000;">
                     <div style="font-weight: bold; font-size: 10pt; white-space: nowrap; margin: 0;">MAJLIS KESELAMATAN NEGARA</div>
                     <div style="white-space: nowrap; margin: 0;">Jabatan Perdana Menteri</div>
                     <div style="white-space: nowrap; margin: 0;">Aras G &amp; LG, Blok Barat, Bangunan Perdana Putra</div>
@@ -381,22 +420,39 @@
                     <div style="white-space: nowrap; margin: 0;">62502 PUTRAJAYA</div>
                     <div style="white-space: nowrap; margin: 0;">MALAYSIA</div>
                 </td>
-                <!-- Bahagian Kanan: Lebar 210px diselaraskan dengan nombor telefon -->
-                <td width="210" valign="top" align="right" style="padding-top: 1px; padding-bottom: 2px;">
-                    <table width="210" cellpadding="0" cellspacing="0" align="right" style="font-family: Arial, sans-serif;">
+                
+                <!-- 3. KANAN: Logo DKN (Selari tepat di atas nombor 03-8872 6817) + Tel/Faks/Portal Rasmi/Emel -->
+                <td width="185" valign="top" align="right" style="padding-top: 1px; padding-bottom: 2px;">
+                    <table width="185" cellpadding="0" cellspacing="0" align="right" style="font-family: Arial, sans-serif;">
                         <tr>
-                            <!-- Logo DKN dibesarkan kepada lebar 185px supaya sepadan tepat dengan ruang nombor telefon di bawahnya -->
-                            <td align="right" style="padding-right: 0px; padding-bottom: 4px;">
-                                <img src="logo_dkn.png" width="185" height="110" style="width: 185px; height: auto; display: block; margin: 0;" onerror="this.style.display='none';">
+                            <!-- padding-left: 60px memastikan logo DKN bermula tepat di atas nombor telefon, bukan di atas perkataan 'Tel' -->
+                            <td align="left" style="padding-left: 60px; padding-bottom: 3px;">
+                                <img id="img-dkn" src="logo_dkn.png" width="120" height="62" style="width: 120px; height: 62px; display: block; margin: 0;" onerror="this.style.display='none';">
                             </td>
                         </tr>
                         <tr>
                             <td align="left">
                                 <table width="100%" cellpadding="0" cellspacing="0" style="font-size: 7pt; line-height: 1.15; color: #000; font-family: Arial, sans-serif;">
-                                    <tr><td width="58" style="white-space: nowrap;">Tel</td><td width="6">:</td><td style="white-space: nowrap;">03-8872 6817</td></tr>
-                                    <tr><td style="white-space: nowrap;">Faks</td><td>:</td><td style="white-space: nowrap;">03-8888 3021</td></tr>
-                                    <tr><td style="white-space: nowrap;">Portal Rasmi</td><td>:</td><td style="white-space: nowrap;">www.mkn.gov.my</td></tr>
-                                    <tr><td style="white-space: nowrap;">Emel</td><td>:</td><td style="white-space: nowrap;">webmaster@mkn.gov.my</td></tr>
+                                    <tr>
+                                        <td width="54" valign="top" style="white-space: nowrap;">Tel</td>
+                                        <td width="6" valign="top">:</td>
+                                        <td valign="top" style="white-space: nowrap;">03-8872 6817</td>
+                                    </tr>
+                                    <tr>
+                                        <td valign="top" style="white-space: nowrap;">Faks</td>
+                                        <td valign="top">:</td>
+                                        <td valign="top" style="white-space: nowrap;">03-8888 3021</td>
+                                    </tr>
+                                    <tr>
+                                        <td valign="top" style="white-space: nowrap;">Portal Rasmi</td>
+                                        <td valign="top">:</td>
+                                        <td valign="top" style="white-space: nowrap;">www.mkn.gov.my</td>
+                                    </tr>
+                                    <tr>
+                                        <td valign="top" style="white-space: nowrap;">Emel</td>
+                                        <td valign="top">:</td>
+                                        <td valign="top" style="white-space: nowrap;">webmaster@mkn.gov.my</td>
+                                    </tr>
                                 </table>
                             </td>
                         </tr>
@@ -405,14 +461,20 @@
             </tr>
         </table>
 
-        <!-- RUJUKAN KAMI & TARIKH -->
+        <!-- RUJUKAN KAMI & TARIKH (Dianjakkan ke kanan mengikut format surat rasmi) -->
         <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom: 18px; margin-top: 4px; font-family: Arial, sans-serif;">
             <tr>
-                <td width="48%"></td>
-                <td width="52%">
+                <td width="62%"></td>
+                <td width="38%">
                     <table width="100%" cellpadding="1" cellspacing="0" style="font-size: 10.5pt; color: #000;">
-                        <tr><td width="85" style="font-style: italic; white-space: nowrap;">Ruj Kami:</td><td id="prev-rujukan"></td></tr>
-                        <tr><td style="font-style: italic; white-space: nowrap;">Tarikh :</td><td id="prev-tarikh"></td></tr>
+                        <tr>
+                            <td width="72" style="font-style: italic; white-space: nowrap;">Ruj Kami:</td>
+                            <td id="prev-rujukan"></td>
+                        </tr>
+                        <tr>
+                            <td style="font-style: italic; white-space: nowrap;">Tarikh :</td>
+                            <td id="prev-tarikh"></td>
+                        </tr>
                     </table>
                 </td>
             </tr>
@@ -453,6 +515,77 @@
 
 <script>
 document.getElementById('tarikh_surat').valueAsDate = new Date();
+
+// Port Fungsi Auto-Trim Ruang Putih Gambar daripada cetak_surat.php ke JavaScript Canvas
+function autoTrimLogo(imgId, targetW, targetH) {
+    const imgEl = document.getElementById(imgId);
+    if (!imgEl) return;
+
+    const tempImg = new Image();
+    tempImg.crossOrigin = "Anonymous";
+    tempImg.onload = function() {
+        const w = tempImg.naturalWidth || tempImg.width;
+        const h = tempImg.naturalHeight || tempImg.height;
+        if (!w || !h) return;
+
+        const canvas = document.createElement('canvas');
+        canvas.width = w;
+        canvas.height = h;
+        const ctx = canvas.getContext('2d');
+
+        // Letak atas kanvas putih untuk kesan sempadan sebenar logo
+        ctx.fillStyle = '#ffffff';
+        ctx.fillRect(0, 0, w, h);
+        ctx.drawImage(tempImg, 0, 0, w, h);
+
+        const imgData = ctx.getImageData(0, 0, w, h).data;
+        let minX = w, minY = h, maxX = 0, maxY = 0;
+        const step = Math.max(1, Math.floor(Math.min(w, h) / 300));
+
+        for (let y = 0; y < h; y += step) {
+            for (let x = 0; x < w; x += step) {
+                const idx = (y * w + x) * 4;
+                const r = imgData[idx];
+                const g = imgData[idx + 1];
+                const b = imgData[idx + 2];
+                if (r < 242 || g < 242 || b < 242) {
+                    if (x < minX) minX = x;
+                    if (x > maxX) maxX = x;
+                    if (y < minY) minY = y;
+                    if (y > maxY) maxY = y;
+                }
+            }
+        }
+
+        if (maxX > minX && maxY > minY) {
+            const cropW = maxX - minX + 1;
+            const cropH = maxY - minY + 1;
+            const outW = targetW * 3;
+            const outH = targetH * 3;
+
+            const cropped = document.createElement('canvas');
+            cropped.width = outW;
+            cropped.height = outH;
+            const cCtx = cropped.getContext('2d');
+            cCtx.fillStyle = '#ffffff';
+            cCtx.fillRect(0, 0, outW, outH);
+            cCtx.drawImage(canvas, minX, minY, cropW, cropH, 0, 0, outW, outH);
+
+            imgEl.src = cropped.toDataURL('image/png');
+            imgEl.width = targetW;
+            imgEl.height = targetH;
+            imgEl.style.width = targetW + 'px';
+            imgEl.style.height = targetH + 'px';
+        }
+    };
+    tempImg.src = imgEl.getAttribute('src');
+}
+
+// Jalankan auto-trim pada kedua-dua logo sebaik sahaja halaman dibuka
+window.addEventListener('DOMContentLoaded', function() {
+    autoTrimLogo('img-jata', 115, 95);
+    autoTrimLogo('img-dkn', 120, 62);
+});
 
 function tukarJenisPerenggan(selectElem) {
     const box = selectElem.closest('.perenggan-box');
@@ -556,7 +689,7 @@ function formatTarikhMelayu(tarikhStr) {
 }
 
 function escapeHtml(text) {
-    return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+    return (text || '').replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 }
 
 function formatTeksSelamat(teks) {
@@ -611,7 +744,7 @@ function janaSurat(event) {
 
     let sejarah = JSON.parse(localStorage.getItem('sejarah_surat_mkn')) || [];
     sejarah.unshift(data);
-    if(sejarah.length > 10) sejarah.pop();
+    if (sejarah.length > 10) sejarah.pop();
     localStorage.setItem('sejarah_surat_mkn', JSON.stringify(sejarah));
 
     paparHtmlSurat(data);
@@ -697,58 +830,25 @@ function tutupPreview() {
     document.querySelector('.container').style.display = 'block';
 }
 
-function convertImgToDataURL(url, callback) {
-    const xhr = new XMLHttpRequest();
-    xhr.onload = function() {
-        const reader = new FileReader();
-        reader.onloadend = function() {
-            callback(reader.result);
-        };
-        reader.readAsDataURL(xhr.response);
-    };
-    xhr.open('GET', url);
-    xhr.responseType = 'blob';
-    xhr.send();
-}
-
 function exportKeWord() {
-    const containerClone = document.getElementById("kandungan-surat").cloneNode(true);
-    const imgs = containerClone.querySelectorAll('img');
-    let loadedCount = 0;
+    const header = "<html xmlns:o='urn:schemas-microsoft-com:office:office' " +
+        "xmlns:w='urn:schemas-microsoft-com:office:word' " +
+        "xmlns='http://www.w3.org/TR/REC-html40'>" +
+        "<head><meta charset='utf-8'><title>Surat Rasmi MKN</title></head><body>";
+    const footer = "</body></html>";
+    const sourceHTML = header + document.getElementById("kandungan-surat").innerHTML + footer;
     
-    function generateDoc(htmlContent) {
-        const header = "<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'><head><meta charset='utf-8'><title>Surat Rasmi MKN</title></head><body>";
-        const footer = "</body></html>";
-        const sourceHTML = header + htmlContent + footer;
-        
-        const blob = new Blob(['\ufeff', sourceHTML], { type: 'application/msword' });
-        const url = URL.createObjectURL(blob);
-        
-        const fileDownload = document.createElement("a");
-        document.body.appendChild(fileDownload);
-        fileDownload.href = url;
-        fileDownload.download = 'Surat_Rasmi_MKN.doc';
-        fileDownload.click();
-        
-        document.body.removeChild(fileDownload);
-        URL.revokeObjectURL(url);
-    }
-
-    if (imgs.length === 0) {
-        generateDoc(containerClone.innerHTML);
-        return;
-    }
-
-    imgs.forEach(img => {
-        const src = img.getAttribute('src');
-        convertImgToDataURL(src, function(base64Url) {
-            img.setAttribute('src', base64Url);
-            loadedCount++;
-            if (loadedCount === imgs.length) {
-                generateDoc(containerClone.innerHTML);
-            }
-        });
-    });
+    const blob = new Blob(['\ufeff', sourceHTML], { type: 'application/msword' });
+    const url = URL.createObjectURL(blob);
+    
+    const fileDownload = document.createElement("a");
+    document.body.appendChild(fileDownload);
+    fileDownload.href = url;
+    fileDownload.download = 'Surat_Rasmi_MKN.doc';
+    fileDownload.click();
+    
+    document.body.removeChild(fileDownload);
+    URL.revokeObjectURL(url);
 }
 
 function muatSejarah() {
@@ -756,7 +856,7 @@ function muatSejarah() {
     const ul = document.getElementById('senarai-sejarah');
     ul.innerHTML = '';
 
-    if(sejarah.length === 0) {
+    if (sejarah.length === 0) {
         ul.innerHTML = '<li style="color: #718096; font-size: 13px;">Tiada rekod tersimpan.</li>';
         return;
     }
@@ -777,13 +877,13 @@ function muatSejarah() {
 function bukaRekod(id) {
     const sejarah = JSON.parse(localStorage.getItem('sejarah_surat_mkn')) || [];
     const item = sejarah.find(s => s.id === id);
-    if(item) {
+    if (item) {
         paparHtmlSurat(item);
     }
 }
 
 function padamSejarah() {
-    if(confirm("Adakah anda pasti mahu memadam semua rekod surat tersimpan?")) {
+    if (confirm("Adakah anda pasti mahu memadam semua rekod surat tersimpan?")) {
         localStorage.removeItem('sejarah_surat_mkn');
         muatSejarah();
     }
