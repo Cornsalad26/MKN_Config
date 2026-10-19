@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistem Penjana Surat Rasmi MKN / NACSA (GitHub Pages)</title>
+    <style>
+        :root {
+            --primary: #111c44;
+            --accent: #2b6cb0;
+            --bg: #f0f4f8;
+            --card-bg: #ffffff;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg);
+            margin: 0;
+            padding: 25px 15px;
+            color: #2d3748;
+        }
+        .container { max-width: 850px; margin: 0 auto; }
+        .header-banner {
+            background: var(--primary);
+            color: #fff;
+            padding: 24px 30px;
+            border-radius: 10px 10px 0 0;
+            border-bottom: 5px solid #ecc94b;
+        }
+        .header-banner h1 { margin: 0 0 6px 0; font-size: 21px; }
+        .header-banner p { margin: 0; opacity: 0.9; font-size: 13.5px; }
+        
+        .card {
+            background: var(--card-bg);
+            padding: 24px 30px;
+            margin-bottom: 18px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.06);
+            border-left: 5px solid var(--accent);
+        }
+        .card.first-card { border-radius: 0 0 8px 8px; }
+        .card h3 {
+            margin-top: 0;
+            color: var(--primary);
+            font-size: 16.5px;
+            border-bottom: 1px solid #e2e8f0;
+            padding-bottom: 10px;
+            margin-bottom: 16px;
+        }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; font-weight: 600; margin-bottom: 5px; font-size: 13.5px; }
+        .hint { font-size: 12px; color: #718096; margin-top: -2px; margin-bottom: 6px; }
+        input[type="text"], input[type="date"], select, textarea {
+            width: 100%;
+            padding: 9px 12px;
+            border: 1px solid #cbd5e0;
+            border-radius: 6px;
+            font-size: 14px;
+            box-sizing: border-box;
+            font-family: inherit;
+        }
+        .row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .perenggan-box {
+            background: #f8fafc;
+            border: 1px solid #cbd5e0;
+            padding: 16px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+        .perenggan-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .toolbar { display: flex; gap: 8px; margin-bottom: 8px; flex-wrap: wrap; }
+        .btn-tool {
+            background: #edf2f7;
+            border: 1px solid #cbd5e0;
+            padding: 5px 11px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        .btn-tool:hover { background: #e2e8f0; }
+        .btn-tool.highlight { background: #fefcbf; border-color: #ecc94b; }
+        .btn-remove {
+            background: #fed7d7;
+            color: #c53030;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        .btn-add {
+            background: #ebf8ff;
+            color: var(--accent);
+            border: 1px dashed var(--accent);
+            padding: 12px;
+            width: 100%;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 14px;
+        }
+        .btn-submit {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 15px 28px;
+            font-size: 16px;
+            font-weight: 600;
+            border-radius: 6px;
+            cursor: pointer;
+            width: 100%;
+        }
+        .btn-submit:hover { background: #1e2e6e; }
+        .jadual-sub {
+            background: #ffffff;
+            border: 1px solid #cbd5e0;
+            padding: 12px;
+            border-radius: 6px;
+            margin-top: 10px;
+            display: none;
+        }
+        
+        /* CSS Pratonton Cetak A4 Rasmi MKN */
+        #cetak-preview {
+            display: none;
+            background: #4a5568;
+            padding: 20px 0;
+            min-height: 100vh;
+        }
+        .action-bar { max-width: 210mm; margin: 0 auto 15px auto; display: flex; justify-content: space-between; align-items: center; background: #111c44; padding: 12px 20px; border-radius: 8px; color: #fff; box-sizing: border-box; }
+        .btn-action { background: #ecc94b; color: #1a202c; border: none; padding: 8px 15px; border-radius: 5px; font-weight: bold; cursor: pointer; text-decoration: none; font-size: 13px; margin-left: 6px; }
+        .btn-action.secondary { background: #edf2f7; color: #2d3748; }
+        .kertas-a4 { background: #fff; width: 210mm; min-height: 297mm; margin: 0 auto; padding: 14mm 18mm 18mm 20mm; box-sizing: border-box; box-shadow: 0 4px 15px rgba(0,0,0,0.35); font-family: Arial, sans-serif; font-size: 11pt; line-height: 1.35; color: #000; }
+        
+        @media print {
+            body { background: #fff; padding: 0; }
+            .no-print { display: none !important; }
+            #cetak-preview { background: #fff; padding: 0; }
+            .action-bar { display: none !important; }
+            .kertas-a4 { box-shadow: none; width: 100%; min-height: auto; padding: 0; margin: 0; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container no-print">
+    <div class="header-banner">
+        <div>
+            <h1>Sistem Borang Surat Rasmi (MKN / NACSA)</h1>
+            <p>Versi GitHub Pages (Frontend Sahaja - Tanpa Pangkalan Data)</p>
+        </div>
+    </div>
+
+    <form id="form-surat" onsubmit="janaSurat(event)">
+        <!-- 1. RUJUKAN & TARIKH -->
+        <div class="card first-card">
+            <h3>1. Rujukan & Tarikh Surat</h3>
+            <div class="row-2">
+                <div class="form-group">
+                    <label>Ruj. Kami (Biarkan kosong untuk isi manual)</label>
+                    <input type="text" id="no_rujukan_kami" placeholder="Contoh: MKN.500-8/9/1 (   )">
+                </div>
+                <div class="form-group">
+                    <label>Tarikh Surat *</label>
+                    <input type="date" id="tarikh_surat" required>
+                </div>
+            </div>
+        </div>
+
+        <!-- 2. PENERIMA SURAT -->
+        <div class="card">
+            <h3>2. Maklumat Penerima (Bahagian Atas Kiri)</h3>
+            <div class="form-group">
+                <label>Baris Pertama Penerima (Akan di-BOLD) *</label>
+                <input type="text" id="nama_penerima" placeholder="Contoh: Penyelaras Latihan Industri" required>
+            </div>
+
+            <div class="row-2">
+                <div class="form-group">
+                    <label>Jawatan / Fakulti / Bahagian (Baris Ke-2)</label>
+                    <input type="text" id="jawatan_penerima" placeholder="Contoh: Fakulti Teknologi Maklumat dan Komunikasi">
+                </div>
+                <div class="form-group">
+                    <label>Nama Agensi / Universiti (Baris Ke-3)</label>
+                    <input type="text" id="nama_agensi" placeholder="Contoh: Universiti Teknikal Malaysia Melaka (UTeM)">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Alamat Penerima *</label>
+                <textarea id="alamat_penerima" rows="2" placeholder="Hang Tuah Jaya&#10;76100 Durian Tunggal, Melaka" required></textarea>
+            </div>
+
+            <div class="row-2">
+                <div class="form-group">
+                    <label>Panggilan Hormat Sebelum Tajuk *</label>
+                    <select id="panggilan_hormat_bawah" required>
+                        <option value="Tuan/Puan,">Tuan/Puan,</option>
+                        <option value="YBhg. Datuk/Dato'/Tuan/Puan,">YBhg. Datuk/Dato'/Tuan/Puan,</option>
+                        <option value="YBhg. Tan Sri/Datuk/Dato',">YBhg. Tan Sri/Datuk/Dato',</option>
+                        <option value="Tuan,">Tuan,</option>
+                        <option value="Puan,">Puan,</option>
+                        <option value="Saudara/Saudari,">Saudara/Saudari,</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Panggilan Hormat Atas (Pilihan)</label>
+                    <input type="text" id="panggilan_hormat_atas" placeholder="Biarkan kosong jika tiada">
+                </div>
+            </div>
+        </div>
+
+        <!-- 3. TAJUK & MUKADDIMAH -->
+        <div class="card">
+            <h3>3. Tajuk & Mukaddimah Surat</h3>
+            <div class="form-group">
+                <label>Tajuk Surat (Automatik HURUF BESAR & BOLD) *</label>
+                <textarea id="tajuk_surat" rows="2" placeholder="PEMBERITAHUAN PERMOHONAN MENJALANI LATIHAN INDUSTRI..." required></textarea>
+                <label style="font-weight:normal; margin-top:6px;">
+                    <input type="checkbox" id="ada_highlight_tajuk" value="1"> 🖍️ Highlight kuning pada tajuk surat
+                </label>
+            </div>
+
+            <div class="form-group">
+                <label>Mukaddimah (Perenggan Pertama Tanpa Nombor) *</label>
+                <textarea id="mukaddimah" rows="2" required>Dengan hormatnya saya diarah merujuk kepada perkara tersebut di atas.</textarea>
+            </div>
+        </div>
+
+        <!-- 4. ISI PERENGGAN DINAMIK -->
+        <div class="card">
+            <h3>4. Kandungan Perenggan Surat (Perenggan 2, 3, dan seterusnya)</h3>
+            <div class="hint" style="margin-bottom:14px;">
+                Tip: <i>Highlight</i> perkataan dan klik butang <b>[B Bold]</b>, <b>[<u>U</u> Garis Bawah]</b>, atau <b>[🖍️ Highlight]</b>.
+            </div>
+
+            <div id="senarai-perenggan">
+                <div class="perenggan-box">
+                    <div class="perenggan-header">
+                        <strong class="label-perenggan">Perenggan #2</strong>
+                        <select class="jenis_kandungan" onchange="tukarJenisPerenggan(this)" style="width:auto; padding:5px 10px;">
+                            <option value="teks_biasa">Perenggan Teks Biasa</option>
+                            <option value="jadual_butiran">Perenggan + Jadual (Tarikh / Masa / Tempat / Siapa)</option>
+                        </select>
+                    </div>
+
+                    <div class="toolbar">
+                        <button type="button" class="btn-tool" onclick="formatTeks(this, 'b')"><b>B</b> Bold</button>
+                        <button type="button" class="btn-tool" onclick="formatTeks(this, 'u')"><u>U</u> Garis Bawah</button>
+                        <button type="button" class="btn-tool highlight" onclick="formatTeks(this, 'mark')">🖍️ Highlight Kuning</button>
+                    </div>
+
+                    <textarea class="teks_perenggan" rows="4" placeholder="Contoh: Sukacita dimaklumkan bahawa..." required></textarea>
+
+                    <div class="jadual-sub">
+                        <div class="row-2">
+                            <div class="form-group">
+                                <label>Tarikh</label>
+                                <input type="text" class="butiran_tarikh" placeholder="Contoh: 28 September 2026 (Isnin)">
+                            </div>
+                            <div class="form-group">
+                                <label>Masa</label>
+                                <input type="text" class="butiran_masa" placeholder="Contoh: 9.00 pagi">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Tempat / Lokasi</label>
+                            <input type="text" class="butiran_tempat" placeholder="Contoh: Aras 3, NACSA Cyberjaya">
+                        </div>
+                        <div class="form-group" style="margin-bottom:0;">
+                            <label>Pegawai / Siapa Terlibat / Sasaran</label>
+                            <input type="text" class="butiran_pengerusi" placeholder="Contoh: Pasukan Audit Pematuhan NACSA">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <button type="button" class="btn-add" onclick="tambahPerenggan()">+ Tambah Perenggan Seterusnya</button>
+        </div>
+
+        <!-- 5. PENUTUP & TANDATANGAN MANUAL -->
+        <div class="card">
+            <h3>5. Ayat Penutup & Butiran Pegawai Penandatangan</h3>
+            <div class="form-group">
+                <label>Ayat Penutup</label>
+                <textarea id="ayat_penutup" rows="2">Kerjasama dan perhatian Tuan/Puan mengenai perkara ini amatlah dihargai.</textarea>
+            </div>
+
+            <div class="row-2">
+                <div class="form-group">
+                    <label>Nama Pegawai Penandatangan *</label>
+                    <input type="text" id="manual_nama_pegawai" placeholder="Contoh: MUHAMAD HAFIZ BIN AZMAN" required>
+                </div>
+                <div class="form-group">
+                    <label>Jawatan Pegawai</label>
+                    <input type="text" id="manual_jawatan_pegawai" placeholder="Contoh: Ketua Unit Audit">
+                </div>
+            </div>
+
+            <div class="row-2">
+                <div class="form-group">
+                    <label>Bahagian / Unit Pegawai *</label>
+                    <input type="text" id="manual_bahagian_unit" value="Unit Pematuhan Khas Audit (BAP)" required>
+                </div>
+                <div class="form-group">
+                    <label>Atas Perintah (b.p.) *</label>
+                    <input type="text" id="manual_bp_jawatan" value="b.p. Ketua Eksekutif NACSA" required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Agensi Induk / Jabatan *</label>
+                <textarea id="manual_agensi_induk" rows="2" required>Agensi Keselamatan Siber Negara (NACSA)&#10;Majlis Keselamatan Negara</textarea>
+            </div>
+
+            <div class="row-2">
+                <div class="form-group">
+                    <label>No. Telefon Pegawai</label>
+                    <input type="text" id="manual_no_tel" placeholder="Contoh: 03-8872 6830">
+                </div>
+                <div class="form-group">
+                    <label>Emel Pegawai</label>
+                    <input type="text" id="manual_emel" placeholder="Contoh: hafizazman@mkn.gov.my">
+                </div>
+            </div>
+
+            <div class="form-group" style="margin-top: 15px;">
+                <label>Frasa Amanah</label>
+                <input type="text" id="frasa_amanah" value="Saya yang menjalankan amanah,">
+            </div>
+
+            <div class="form-group">
+                <label>Salinan Kepada / s.k. (Jika ada)</label>
+                <textarea id="salinan_kepada" rows="2"></textarea>
+            </div>
+        </div>
+
+        <button type="submit" class="btn-submit">Jana & Cetak Surat Rasmi Sekarang ➔</button>
+    </form>
+
+    <!-- SEJARAH SURAT (Local Storage) -->
+    <div class="card" style="margin-top: 25px; border-left-color: #38a169;">
+        <h3>Rekod Surat Tersimpan (Dalam Pelayar)</h3>
+        <ul id="senarai-sejarah" style="padding-left: 20px; margin: 0;">
+            <!-- Dimuatkan secara dinamik melalui JS -->
+        </ul>
+        <button type="button" onclick="padamSejarah()" style="margin-top: 15px; background: #fed7d7; color: #c53030; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 12px;">Padam Semua Rekod Tersimpan</button>
+    </div>
+</div>
+
+<!-- PAPARAN CETAK SURAT (A4 Rasmi MKN) -->
+<div id="cetak-preview">
+    <div class="action-bar no-print">
+        <div>
+            <strong>Pratonton Surat Rasmi MKN / NACSA</strong>
+            <span style="font-size:12px; opacity:0.85; display:block;">Susunan Header diselaraskan mengikut format rasmi MKN.</span>
+        </div>
+        <div>
+            <button onclick="tutupPreview()" class="btn-action secondary">← Borang Baru</button>
+            <button onclick="exportKeWord()" class="btn-action secondary">📄 Muat Turun Word (.doc)</button>
+            <button onclick="window.print()" class="btn-action">🖨️ Cetak / Simpan PDF</button>
+        </div>
+    </div>
+
+    <div class="kertas-a4" id="kandungan-surat">
+        <!-- HEADER RASMI MKN -->
+        <table width="100%" cellpadding="0" cellspacing="0" style="border-bottom: 1.5px solid #000; margin-bottom: 6px; font-family: Arial, sans-serif;">
+            <tr>
+                <td width="122" valign="top" align="left" style="padding-top: 1px; padding-bottom: 8px;">
+                    <img src="logo_mkn.png" width="115" height="95" style="width: 115px; height: 95px; display: block; margin: 0;" onerror="this.style.display='none';">
+                </td>
+                <td valign="top" align="left" style="padding-left: 8px; padding-top: 0px; padding-bottom: 8px; font-size: 10pt; line-height: 1.22; color: #000;">
+                    <div style="font-weight: bold; font-size: 10pt; white-space: nowrap; margin: 0;">MAJLIS KESELAMATAN NEGARA</div>
+                    <div style="white-space: nowrap; margin: 0;">Jabatan Perdana Menteri</div>
+                    <div style="white-space: nowrap; margin: 0;">Aras G &amp; LG, Blok Barat, Bangunan Perdana Putra</div>
+                    <div style="white-space: nowrap; margin: 0;">Pusat Pentadbiran Kerajaan Persekutuan</div>
+                    <div style="white-space: nowrap; margin: 0;">62502 PUTRAJAYA</div>
+                    <div style="white-space: nowrap; margin: 0;">MALAYSIA</div>
+                </td>
+                <td width="185" valign="top" align="right" style="padding-top: 1px; padding-bottom: 2px;">
+                    <table width="185" cellpadding="0" cellspacing="0" align="right" style="font-family: Arial, sans-serif;">
+                        <tr>
+                            <td align="right" style="padding-right: 6px; padding-bottom: 3px;">
+                                <img src="logo_dkn.png" width="105" height="68" style="width: 105px; height: 68px; display: block; margin: 0;" onerror="this.style.display='none';">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td align="left">
+                                <table width="100%" cellpadding="0" cellspacing="0" style="font-size: 7pt; line-height: 1.15; color: #000; font-family: Arial, sans-serif;">
+                                    <tr><td width="58" style="white-space: nowrap;">Tel</td><td width="6">:</td><td style="white-space: nowrap;">03-8872 6817</td></tr>
+                                    <tr><td style="white-space: nowrap;">Faks</td><td>:</td><td style="white-space: nowrap;">03-8888 3021</td></tr>
+                                    <tr><td style="white-space: nowrap;">Portal Rasmi</td><td>:</td><td style="white-space: nowrap;">www.mkn.gov.my</td></tr>
+                                    <tr><td style="white-space: nowrap;">Emel</td><td>:</td><td style="white-space: nowrap;">webmaster@mkn.gov.my</td></tr>
+                                </table>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+
+        <!-- RUJUKAN KAMI & TARIKH -->
+        <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom: 18px; margin-top: 4px; font-family: Arial, sans-serif;">
+            <tr>
+                <td width="55%"></td>
+                <td width="45%">
+                    <table width="100%" cellpadding="1" cellspacing="0" style="font-size: 10.5pt; color: #000;">
+                        <tr><td width="72" style="font-style: italic; white-space: nowrap;">Ruj Kami:</td><td id="prev-rujukan"></td></tr>
+                        <tr><td style="font-style: italic; white-space: nowrap;">Tarikh :</td><td id="prev-tarikh"></td></tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+
+        <!-- MAKLUMAT PENERIMA -->
+        <div id="prev-penerima-block" style="margin-bottom: 16px; line-height: 1.3;"></div>
+        <div id="prev-panggilan-hormat" style="margin-bottom: 14px;"></div>
+
+        <!-- TAJUK SURAT -->
+        <div id="prev-tajuk" style="font-weight: bold; text-transform: uppercase; text-align: justify; margin-bottom: 14px; line-height: 1.3;"></div>
+
+        <!-- MUKADDIMAH -->
+        <div id="prev-mukaddimah" style="text-align: justify; margin-bottom: 13px;"></div>
+
+        <!-- PERENGGAN DINAMIK -->
+        <div id="prev-perenggan-container"></div>
+
+        <!-- PENUTUP & SLOGAN -->
+        <div id="prev-ayat-penutup" style="text-align: justify; margin-bottom: 13px;"></div>
+        <div style="margin-bottom: 14px;">Sekian, terima kasih.</div>
+
+        <div style="font-weight: bold; margin-bottom: 14px; line-height: 1.35;">
+            <div>"MALAYSIA MADANI"</div>
+            <div style="margin-top: 10px;">"BERKHIDMAT UNTUK NEGARA"</div>
+            <div style="margin-top: 10px;">"KESELAMATAN NEGARA TANGGUNGJAWAB BERSAMA"</div>
+        </div>
+
+        <div id="prev-frasa-amanah" style="margin-bottom: 50px;"></div>
+
+        <!-- TANDATANGAN MANUAL -->
+        <div id="prev-tandatangan" style="line-height: 1.3;"></div>
+
+        <!-- SALINAN KEPADA -->
+        <div id="prev-salinan" style="margin-top: 20px; font-size: 10pt;"></div>
+    </div>
+</div>
+
+<script>
+document.getElementById('tarikh_surat').valueAsDate = new Date();
+
+function tukarJenisPerenggan(selectElem) {
+    const box = selectElem.closest('.perenggan-box');
+    const sub = box.querySelector('.jadual-sub');
+    sub.style.display = (selectElem.value === 'jadual_butiran') ? 'block' : 'none';
+}
+
+function formatTeks(btn, tag) {
+    const box = btn.closest('.perenggan-box');
+    const textarea = box.querySelector('textarea');
+    const start = textarea.selectionStart;
+    const end = textarea.selectionEnd;
+    const selectedText = textarea.value.substring(start, end);
+
+    if (!selectedText) {
+        alert("Sila highlight / pilih perkataan di dalam kotak teks terlebih dahulu.");
+        return;
+    }
+
+    const replacement = `<${tag}>${selectedText}</${tag}>`;
+    textarea.value = textarea.value.substring(0, start) + replacement + textarea.value.substring(end);
+}
+
+function tambahPerenggan() {
+    const container = document.getElementById('senarai-perenggan');
+    const kiraanSemasa = container.querySelectorAll('.perenggan-box').length;
+    const nomborPerenggan = kiraanSemasa + 2;
+
+    const div = document.createElement('div');
+    div.className = 'perenggan-box';
+    div.innerHTML = `
+        <div class="perenggan-header">
+            <strong class="label-perenggan">Perenggan #${nomborPerenggan}</strong>
+            <div style="display:flex; gap:10px; align-items:center;">
+                <select class="jenis_kandungan" onchange="tukarJenisPerenggan(this)" style="width:auto; padding:5px 10px;">
+                    <option value="teks_biasa">Perenggan Teks Biasa</option>
+                    <option value="jadual_butiran">Perenggan + Jadual (Tarikh / Masa / Tempat / Siapa)</option>
+                </select>
+                <button type="button" class="btn-remove" onclick="buangPerenggan(this)">✕ Padam</button>
+            </div>
+        </div>
+
+        <div class="toolbar">
+            <button type="button" class="btn-tool" onclick="formatTeks(this, 'b')"><b>B</b> Bold</button>
+            <button type="button" class="btn-tool" onclick="formatTeks(this, 'u')"><u>U</u> Garis Bawah</button>
+            <button type="button" class="btn-tool highlight" onclick="formatTeks(this, 'mark')">🖍️ Highlight Kuning</button>
+        </div>
+
+        <textarea class="teks_perenggan" rows="4" placeholder="Masukkan isi perenggan #${nomborPerenggan}..." required></textarea>
+
+        <div class="jadual-sub">
+            <div class="row-2">
+                <div class="form-group">
+                    <label>Tarikh</label>
+                    <input type="text" class="butiran_tarikh" placeholder="Contoh: 28 September 2026 (Isnin)">
+                </div>
+                <div class="form-group">
+                    <label>Masa</label>
+                    <input type="text" class="butiran_masa" placeholder="Contoh: 9.00 pagi">
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Tempat / Lokasi</label>
+                <input type="text" class="butiran_tempat" placeholder="Contoh: Aras 3, NACSA Cyberjaya">
+            </div>
+            <div class="form-group" style="margin-bottom:0;">
+                <label>Pegawai / Siapa Terlibat / Sasaran</label>
+                <input type="text" class="butiran_pengerusi" placeholder="Contoh: Pasukan Audit Pematuhan NACSA">
+            </div>
+        </div>
+    `;
+    container.appendChild(div);
+    kemaskiniNomborPerenggan();
+}
+
+function buangPerenggan(btn) {
+    btn.closest('.perenggan-box').remove();
+    kemaskiniNomborPerenggan();
+}
+
+function kemaskiniNomborPerenggan() {
+    const boxes = document.querySelectorAll('#senarai-perenggan .perenggan-box');
+    boxes.forEach((box, idx) => {
+        box.querySelector('.label-perenggan').textContent = `Perenggan #${idx + 2}`;
+    });
+}
+
+function formatTarikhMelayu(tarikhStr) {
+    const bulan = [
+        '', 'Januari', 'Februari', 'Mac', 'April', 'Mei', 'Jun', 
+        'Julai', 'Ogos', 'September', 'Oktober', 'November', 'Disember'
+    ];
+    const pecah = tarikhStr.split('-');
+    if (pecah.length === 3) {
+        const hari = parseInt(pecah[2], 10);
+        const idxBulan = parseInt(pecah[1], 10);
+        const tahun = pecah[0];
+        return `${hari} ${bulan[idxBulan]} ${tahun}`;
+    }
+    return tarikhStr;
+}
+
+function escapeHtml(text) {
+    return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+}
+
+function formatTeksSelamat(teks) {
+    let safe = escapeHtml(teks);
+    safe = safe.replace(/&lt;b&gt;/g, '<b>').replace(/&lt;\/b&gt;/g, '</b>');
+    safe = safe.replace(/&lt;u&gt;/g, '<u>').replace(/&lt;\/u&gt;/g, '</u>');
+    safe = safe.replace(/&lt;mark&gt;/g, '<mark style="background-color:#fef08a; padding:0 2px;">').replace(/&lt;\/mark&gt;/g, '</mark>');
+    return safe.replace(/\n/g, '<br>');
+}
+
+function janaSurat(event) {
+    event.preventDefault();
+
+    const data = {
+        id: Date.now(),
+        no_rujukan_kami: document.getElementById('no_rujukan_kami').value,
+        tarikh_surat: formatTarikhMelayu(document.getElementById('tarikh_surat').value),
+        nama_penerima: document.getElementById('nama_penerima').value,
+        jawatan_penerima: document.getElementById('jawatan_penerima').value,
+        nama_agensi: document.getElementById('nama_agensi').value,
+        alamat_penerima: document.getElementById('alamat_penerima').value,
+        panggilan_hormat_bawah: document.getElementById('panggilan_hormat_bawah').value,
+        panggilan_hormat_atas: document.getElementById('panggilan_hormat_atas').value,
+        tajuk_surat: document.getElementById('tajuk_surat').value.toUpperCase(),
+        ada_highlight_tajuk: document.getElementById('ada_highlight_tajuk').checked,
+        mukaddimah: document.getElementById('mukaddimah').value,
+        ayat_penutup: document.getElementById('ayat_penutup').value,
+        frasa_amanah: document.getElementById('frasa_amanah').value,
+        manual_nama_pegawai: document.getElementById('manual_nama_pegawai').value,
+        manual_jawatan_pegawai: document.getElementById('manual_jawatan_pegawai').value,
+        manual_bahagian_unit: document.getElementById('manual_bahagian_unit').value,
+        manual_bp_jawatan: document.getElementById('manual_bp_jawatan').value,
+        manual_agensi_induk: document.getElementById('manual_agensi_induk').value,
+        manual_no_tel: document.getElementById('manual_no_tel').value,
+        manual_emel: document.getElementById('manual_emel').value,
+        salinan_kepada: document.getElementById('salinan_kepada').value,
+        perenggan: []
+    };
+
+    const boxes = document.querySelectorAll('.perenggan-box');
+    boxes.forEach((box, index) => {
+        data.perenggan.push({
+            nombor: index + 2,
+            jenis: box.querySelector('.jenis_kandungan').value,
+            teks: box.querySelector('.teks_perenggan').value,
+            tarikh: box.querySelector('.butiran_tarikh').value,
+            masa: box.querySelector('.butiran_masa').value,
+            tempat: box.querySelector('.butiran_tempat').value,
+            pengerusi: box.querySelector('.butiran_pengerusi').value
+        });
+    });
+
+    let sejarah = JSON.parse(localStorage.getItem('sejarah_surat_mkn')) || [];
+    sejarah.unshift(data);
+    if(sejarah.length > 10) sejarah.pop();
+    localStorage.setItem('sejarah_surat_mkn', JSON.stringify(sejarah));
+
+    paparHtmlSurat(data);
+    muatSejarah();
+}
+
+function paparHtmlSurat(data) {
+    document.getElementById('prev-rujukan').textContent = data.no_rujukan_kami || '';
+    document.getElementById('prev-tarikh').textContent = data.tarikh_surat;
+
+    let penerimaHtml = '';
+    if (data.panggilan_hormat_atas) penerimaHtml += `<div>${escapeHtml(data.panggilan_hormat_atas)}</div>`;
+    penerimaHtml += `<div><strong>${escapeHtml(data.nama_penerima)}</strong></div>`;
+    if (data.jawatan_penerima) penerimaHtml += `<div>${escapeHtml(data.jawatan_penerima)}</div>`;
+    if (data.nama_agensi) penerimaHtml += `<div>${escapeHtml(data.nama_agensi)}</div>`;
+    penerimaHtml += `<div>${escapeHtml(data.alamat_penerima).replace(/\n/g, '<br>')}</div>`;
+    document.getElementById('prev-penerima-block').innerHTML = penerimaHtml;
+
+    document.getElementById('prev-panggilan-hormat').textContent = data.panggilan_hormat_bawah;
+
+    let tajukHtml = escapeHtml(data.tajuk_surat).replace(/\n/g, '<br>');
+    if (data.ada_highlight_tajuk) {
+        tajukHtml = `<mark style="background-color:#fef08a; padding: 0 2px;">${tajukHtml}</mark>`;
+    }
+    document.getElementById('prev-tajuk').innerHTML = tajukHtml;
+
+    document.getElementById('prev-mukaddimah').innerHTML = formatTeksSelamat(data.mukaddimah);
+
+    let perengganContainer = document.getElementById('prev-perenggan-container');
+    perengganContainer.innerHTML = '';
+
+    data.perenggan.forEach(p => {
+        let divP = document.createElement('div');
+        divP.style.cssText = "text-align: justify; margin-bottom: 13px;";
+        divP.innerHTML = `${p.nombor}.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;` + formatTeksSelamat(p.teks);
+        perengganContainer.appendChild(divP);
+
+        if (p.jenis === 'jadual_butiran') {
+            let tableHtml = `<table width="85%" cellpadding="3" cellspacing="0" style="margin-left: 38px; margin-bottom: 15px; font-weight: bold;">`;
+            if (p.tarikh) tableHtml += `<tr><td width="135" valign="top">Tarikh</td><td width="15" valign="top">:</td><td valign="top">${escapeHtml(p.tarikh)}</td></tr>`;
+            if (p.masa) tableHtml += `<tr><td valign="top">Masa</td><td valign="top">:</td><td valign="top">${escapeHtml(p.masa)}</td></tr>`;
+            if (p.tempat) tableHtml += `<tr><td valign="top">Tempat</td><td valign="top">:</td><td valign="top">${escapeHtml(p.tempat)}</td></tr>`;
+            if (p.pengerusi) tableHtml += `<tr><td valign="top">Pegawai / Sasaran</td><td valign="top">:</td><td valign="top">${escapeHtml(p.pengerusi)}</td></tr>`;
+            tableHtml += `</table>`;
+            
+            let divT = document.createElement('div');
+            divT.innerHTML = tableHtml;
+            perengganContainer.appendChild(divT);
+        }
+    });
+
+    document.getElementById('prev-ayat-penutup').innerHTML = data.ayat_penutup ? formatTeksSelamat(data.ayat_penutup) : '';
+    document.getElementById('prev-frasa-amanah').textContent = data.frasa_amanah;
+
+    let ttHtml = `<div><strong>(${escapeHtml(data.manual_nama_pegawai)})</strong></div>`;
+    if (data.manual_jawatan_pegawai) ttHtml += `<div>${escapeHtml(data.manual_jawatan_pegawai)}</div>`;
+    if (data.manual_bahagian_unit) ttHtml += `<div>${escapeHtml(data.manual_bahagian_unit)}</div>`;
+    if (data.manual_bp_jawatan) ttHtml += `<div>${escapeHtml(data.manual_bp_jawatan)}</div>`;
+    if (data.manual_agensi_induk) ttHtml += `<div>${escapeHtml(data.manual_agensi_induk).replace(/\n/g, '<br>')}</div>`;
+
+    if (data.manual_no_tel || data.manual_emel) {
+        ttHtml += `<table cellpadding="0" cellspacing="0" style="font-size: 9pt; font-style: italic; margin-top: 2px;">`;
+        if (data.manual_no_tel) ttHtml += `<tr><td width="35">Tel</td><td width="10">:</td><td>${escapeHtml(data.manual_no_tel)}</td></tr>`;
+        if (data.manual_emel) ttHtml += `<tr><td>Emel</td><td>:</td><td>${escapeHtml(data.manual_emel)}</td></tr>`;
+        ttHtml += `</table>`;
+    }
+    document.getElementById('prev-tandatangan').innerHTML = ttHtml;
+
+    let salinanDiv = document.getElementById('prev-salinan');
+    if (data.salinan_kepada) {
+        salinanDiv.innerHTML = `<strong>s.k.:</strong><br>${escapeHtml(data.salinan_kepada).replace(/\n/g, '<br>')}`;
+        salinanDiv.style.display = 'block';
+    } else {
+        salinanDiv.style.display = 'none';
+    }
+
+    document.querySelector('.container').style.display = 'none';
+    document.getElementById('cetak-preview').style.display = 'block';
+}
+
+function tutupPreview() {
+    document.getElementById('cetak-preview').style.display = 'none';
+    document.querySelector('.container').style.display = 'block';
+}
+
+function exportKeWord() {
+    const header = "<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'><head><meta charset='utf-8'><title>Surat Rasmi MKN</title></head><body>";
+    const footer = "</body></html>";
+    const sourceHTML = header + document.getElementById("kandungan-surat").innerHTML + footer;
+    
+    const blob = new Blob(['\ufeff', sourceHTML], { type: 'application/msword' });
+    const url = URL.createObjectURL(blob);
+    
+    const fileDownload = document.createElement("a");
+    document.body.appendChild(fileDownload);
+    fileDownload.href = url;
+    fileDownload.download = 'Surat_Rasmi_MKN.doc';
+    fileDownload.click();
+    
+    document.body.removeChild(fileDownload);
+    URL.revokeObjectURL(url);
+}
+
+function muatSejarah() {
+    const sejarah = JSON.parse(localStorage.getItem('sejarah_surat_mkn')) || [];
+    const ul = document.getElementById('senarai-sejarah');
+    ul.innerHTML = '';
+
+    if(sejarah.length === 0) {
+        ul.innerHTML = '<li style="color: #718096; font-size: 13px;">Tiada rekod tersimpan.</li>';
+        return;
+    }
+
+    sejarah.forEach(item => {
+        let li = document.createElement('li');
+        li.style.marginBottom = '8px';
+        li.innerHTML = `
+            <a href="#" onclick="bukaRekod(${item.id}); return false;" style="color: var(--accent); font-weight: 600; text-decoration: none;">
+                [Buka Surat] ${escapeHtml(item.tajuk_surat.substring(0, 60))}...
+            </a>
+            <span style="font-size: 12px; color: #718096;"> — ${escapeHtml(item.nama_penerima)} (${escapeHtml(item.tarikh_surat)})</span>
+        `;
+        ul.appendChild(li);
+    });
+}
+
+function bukaRekod(id) {
+    const sejarah = JSON.parse(localStorage.getItem('sejarah_surat_mkn')) || [];
+    const item = sejarah.find(s => s.id === id);
+    if(item) {
+        paparHtmlSurat(item);
+    }
+}
+
+function padamSejarah() {
+    if(confirm("Adakah anda pasti mahu memadam semua rekod surat tersimpan?")) {
+        localStorage.removeItem('sejarah_surat_mkn');
+        muatSejarah();
+    }
+}
+
+muatSejarah();
+</script>
+
+</body>
+</html>
