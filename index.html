@@ -136,14 +136,14 @@
         .action-bar { max-width: 210mm; margin: 0 auto 15px auto; display: flex; justify-content: space-between; align-items: center; background: #111c44; padding: 12px 20px; border-radius: 8px; color: #fff; box-sizing: border-box; }
         .btn-action { background: #ecc94b; color: #1a202c; border: none; padding: 8px 15px; border-radius: 5px; font-weight: bold; cursor: pointer; text-decoration: none; font-size: 13px; margin-left: 6px; }
         .btn-action.secondary { background: #edf2f7; color: #2d3748; }
-        .kertas-a4 { background: #fff; width: 210mm; min-height: 297mm; margin: 0 auto; padding: 14mm 18mm 18mm 20mm; box-sizing: border-box; box-shadow: 0 4px 15px rgba(0,0,0,0.35); font-family: Arial, sans-serif; font-size: 11pt; line-height: 1.35; color: #000; outline: none; }
+        .kertas-a4 { background: #fff; width: 210mm; min-height: 297mm; margin: 0 auto; padding: 14mm 18mm 18mm 20mm; box-sizing: border-box; box-shadow: 0 4px 15px rgba(0,0,0,0.35); font-family: Arial, sans-serif; font-size: 11pt; line-height: 1.35; color: #000; outline: 2px dashed #cbd5e0; }
         
         @media print {
             body { background: #fff; padding: 0; }
             .no-print { display: none !important; }
             #cetak-preview { background: #fff; padding: 0; }
             .action-bar { display: none !important; }
-            .kertas-a4 { box-shadow: none; width: 100%; min-height: auto; padding: 0; margin: 0; }
+            .kertas-a4 { box-shadow: none; width: 100%; min-height: auto; padding: 0; margin: 0; outline: none; }
         }
     </style>
 </head>
@@ -153,7 +153,7 @@
     <div class="header-banner">
         <div>
             <h1>Sistem Borang Surat Rasmi (MKN / NACSA)</h1>
-            <p>Versi GitHub Pages (Boleh Edit Terus & Word Embedded Logo)</p>
+            <p>Versi GitHub Pages (Fully Editable & Fixed Alignment)</p>
         </div>
     </div>
 
@@ -344,12 +344,10 @@
         <button type="submit" class="btn-submit">Jana & Cetak Surat Rasmi Sekarang ➔</button>
     </form>
 
-    <!-- SEJARAH SURAT (Local Storage) -->
+    <!-- SEJARAH SURAT -->
     <div class="card" style="margin-top: 25px; border-left-color: #38a169;">
         <h3>Rekod Surat Tersimpan (Dalam Pelayar)</h3>
-        <ul id="senarai-sejarah" style="padding-left: 20px; margin: 0;">
-            <!-- Dimuatkan secara dinamik melalui JS -->
-        </ul>
+        <ul id="senarai-sejarah" style="padding-left: 20px; margin: 0;"></ul>
         <button type="button" onclick="padamSejarah()" style="margin-top: 15px; background: #fed7d7; color: #c53030; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 12px;">Padam Semua Rekod Tersimpan</button>
     </div>
 </div>
@@ -359,7 +357,7 @@
     <div class="action-bar no-print">
         <div>
             <strong>Pratonton Surat Rasmi MKN / NACSA</strong>
-            <span style="font-size:12px; opacity:0.85; display:block;">Anda boleh klik terus pada teks di bawah untuk edit sebelum cetak/Word.</span>
+            <span style="font-size:12px; opacity:0.85; display:block;">Klik terus pada teks kertas di bawah untuk edit sebelum cetak atau muat turun Word.</span>
         </div>
         <div>
             <button onclick="tutupPreview()" class="btn-action secondary">← Borang Baru</button>
@@ -405,13 +403,13 @@
             </tr>
         </table>
 
-        <!-- RUJUKAN KAMI & TARIKH -->
+        <!-- RUJUKAN KAMI & TARIKH (Ditarik Anjakan ke Kanan) -->
         <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom: 18px; margin-top: 4px; font-family: Arial, sans-serif;">
             <tr>
-                <td width="55%"></td>
-                <td width="45%">
+                <td width="48%"></td>
+                <td width="52%">
                     <table width="100%" cellpadding="1" cellspacing="0" style="font-size: 10.5pt; color: #000;">
-                        <tr><td width="72" style="font-style: italic; white-space: nowrap;">Ruj Kami:</td><td id="prev-rujukan"></td></tr>
+                        <tr><td width="85" style="font-style: italic; white-space: nowrap;">Ruj Kami:</td><td id="prev-rujukan"></td></tr>
                         <tr><td style="font-style: italic; white-space: nowrap;">Tarikh :</td><td id="prev-tarikh"></td></tr>
                     </table>
                 </td>
@@ -697,7 +695,6 @@ function tutupPreview() {
     document.querySelector('.container').style.display = 'block';
 }
 
-// Fungsi Tukar Gambar kepada Base64 supaya tidak hilang dalam Word (.doc)
 function convertImgToDataURL(url, callback) {
     const xhr = new XMLHttpRequest();
     xhr.onload = function() {
@@ -714,8 +711,6 @@ function convertImgToDataURL(url, callback) {
 
 function exportKeWord() {
     const containerClone = document.getElementById("kandungan-surat").cloneNode(true);
-    
-    // Tukar imej kepada base64 secara automatik sebelum muat turun ke Word
     const imgs = containerClone.querySelectorAll('img');
     let loadedCount = 0;
     
