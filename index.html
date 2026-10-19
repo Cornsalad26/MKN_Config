@@ -126,7 +126,7 @@
             display: none;
         }
         
-        /* CSS Pratonton Cetak A4 Rasmi MKN */
+        /* Pratonton Cetak A4 Rasmi MKN */
         #cetak-preview {
             display: none;
             background: #4a5568;
@@ -136,7 +136,7 @@
         .action-bar { max-width: 210mm; margin: 0 auto 15px auto; display: flex; justify-content: space-between; align-items: center; background: #111c44; padding: 12px 20px; border-radius: 8px; color: #fff; box-sizing: border-box; }
         .btn-action { background: #ecc94b; color: #1a202c; border: none; padding: 8px 15px; border-radius: 5px; font-weight: bold; cursor: pointer; text-decoration: none; font-size: 13px; margin-left: 6px; }
         .btn-action.secondary { background: #edf2f7; color: #2d3748; }
-        .kertas-a4 { background: #fff; width: 210mm; min-height: 297mm; margin: 0 auto; padding: 14mm 18mm 18mm 20mm; box-sizing: border-box; box-shadow: 0 4px 15px rgba(0,0,0,0.35); font-family: Arial, sans-serif; font-size: 11pt; line-height: 1.35; color: #000; }
+        .kertas-a4 { background: #fff; width: 210mm; min-height: 297mm; margin: 0 auto; padding: 14mm 18mm 18mm 20mm; box-sizing: border-box; box-shadow: 0 4px 15px rgba(0,0,0,0.35); font-family: Arial, sans-serif; font-size: 11pt; line-height: 1.35; color: #000; outline: none; }
         
         @media print {
             body { background: #fff; padding: 0; }
@@ -153,7 +153,7 @@
     <div class="header-banner">
         <div>
             <h1>Sistem Borang Surat Rasmi (MKN / NACSA)</h1>
-            <p>Versi GitHub Pages (Frontend Sahaja - Tanpa Pangkalan Data)</p>
+            <p>Versi GitHub Pages (Boleh Edit Terus & Word Embedded Logo)</p>
         </div>
     </div>
 
@@ -354,12 +354,12 @@
     </div>
 </div>
 
-<!-- PAPARAN CETAK SURAT (A4 Rasmi MKN) -->
+<!-- PAPARAN CETAK SURAT (A4 Rasmi MKN) - contenteditable="true" -->
 <div id="cetak-preview">
     <div class="action-bar no-print">
         <div>
             <strong>Pratonton Surat Rasmi MKN / NACSA</strong>
-            <span style="font-size:12px; opacity:0.85; display:block;">Susunan Header diselaraskan mengikut format rasmi MKN.</span>
+            <span style="font-size:12px; opacity:0.85; display:block;">Anda boleh klik terus pada teks di bawah untuk edit sebelum cetak/Word.</span>
         </div>
         <div>
             <button onclick="tutupPreview()" class="btn-action secondary">← Borang Baru</button>
@@ -368,7 +368,7 @@
         </div>
     </div>
 
-    <div class="kertas-a4" id="kandungan-surat">
+    <div class="kertas-a4" id="kandungan-surat" contenteditable="true" spellcheck="false">
         <!-- HEADER RASMI MKN -->
         <table width="100%" cellpadding="0" cellspacing="0" style="border-bottom: 1.5px solid #000; margin-bottom: 6px; font-family: Arial, sans-serif;">
             <tr>
@@ -697,22 +697,61 @@ function tutupPreview() {
     document.querySelector('.container').style.display = 'block';
 }
 
+// Fungsi Tukar Gambar kepada Base64 supaya tidak hilang dalam Word (.doc)
+function convertImgToDataURL(url, callback) {
+    const xhr = new XMLHttpRequest();
+    xhr.onload = function() {
+        const reader = new FileReader();
+        reader.onloadend = function() {
+            callback(reader.result);
+        };
+        reader.readAsDataURL(xhr.response);
+    };
+    xhr.open('GET', url);
+    xhr.responseType = 'blob';
+    xhr.send();
+}
+
 function exportKeWord() {
-    const header = "<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'><head><meta charset='utf-8'><title>Surat Rasmi MKN</title></head><body>";
-    const footer = "</body></html>";
-    const sourceHTML = header + document.getElementById("kandungan-surat").innerHTML + footer;
+    const containerClone = document.getElementById("kandungan-surat").cloneNode(true);
     
-    const blob = new Blob(['\ufeff', sourceHTML], { type: 'application/msword' });
-    const url = URL.createObjectURL(blob);
+    // Tukar imej kepada base64 secara automatik sebelum muat turun ke Word
+    const imgs = containerClone.querySelectorAll('img');
+    let loadedCount = 0;
     
-    const fileDownload = document.createElement("a");
-    document.body.appendChild(fileDownload);
-    fileDownload.href = url;
-    fileDownload.download = 'Surat_Rasmi_MKN.doc';
-    fileDownload.click();
-    
-    document.body.removeChild(fileDownload);
-    URL.revokeObjectURL(url);
+    function generateDoc(htmlContent) {
+        const header = "<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'><head><meta charset='utf-8'><title>Surat Rasmi MKN</title></head><body>";
+        const footer = "</body></html>";
+        const sourceHTML = header + htmlContent + footer;
+        
+        const blob = new Blob(['\ufeff', sourceHTML], { type: 'application/msword' });
+        const url = URL.createObjectURL(blob);
+        
+        const fileDownload = document.createElement("a");
+        document.body.appendChild(fileDownload);
+        fileDownload.href = url;
+        fileDownload.download = 'Surat_Rasmi_MKN.doc';
+        fileDownload.click();
+        
+        document.body.removeChild(fileDownload);
+        URL.revokeObjectURL(url);
+    }
+
+    if (imgs.length === 0) {
+        generateDoc(containerClone.innerHTML);
+        return;
+    }
+
+    imgs.forEach(img => {
+        const src = img.getAttribute('src');
+        convertImgToDataURL(src, function(base64Url) {
+            img.setAttribute('src', base64Url);
+            loadedCount++;
+            if (loadedCount === imgs.length) {
+                generateDoc(containerClone.innerHTML);
+            }
+        });
+    });
 }
 
 function muatSejarah() {
